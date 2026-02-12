@@ -1515,7 +1515,7 @@ struct CompareSectionByName
         
         uint64_t length = (++ehFrameIter != lsdaInfo.end()
                            ? [self RVAToFileOffset:ehFrameIter->first]
-                           : section_64->offset + section_64->size) - location;
+                           : imageOffset + section_64->offset + section_64->size) - location;
         
         [self createLSDANode:sectionNode 
                      caption:(lastNodeCaption = [NSString stringWithFormat:@"LSDA %@",[self findSymbolAtRVA:lsdaAddr]])

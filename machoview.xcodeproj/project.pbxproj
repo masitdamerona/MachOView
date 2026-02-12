@@ -386,7 +386,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd capstone\nCAPSTONE_ARCHS=\"arm aarch64 x86 powerpc\" CAPSTONE_USE_SYS_DYN_MEM=yes CAPSTONE_DIET=no CAPSTONE_X86_REDUCE=no CAPSTONE_STATIC=yes ./make.sh mac-universal\n";
+			shellScript = "cd capstone\nif [ ! -f libcapstone.a ]; then\n  CAPSTONE_ARCHS=\"arm aarch64 x86 powerpc\" CAPSTONE_USE_SYS_DYN_MEM=yes CAPSTONE_DIET=no CAPSTONE_X86_REDUCE=no CAPSTONE_STATIC=yes ./make.sh mac-universal\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

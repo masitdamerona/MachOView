@@ -180,23 +180,26 @@
 {
   range.location = NSMaxRange(range);
   uint8_t * p = (uint8_t *)[fileData bytes] + range.location, *start = p;
-  
+  uint8_t * end = (uint8_t *)[fileData bytes] + [fileData length];
+
   int64_t result = 0;
   int bit = 0;
   uint8_t byte;
-  
+
   do {
+    if (p >= end)
+      [NSException raise:@"sleb128 error" format:@"sleb128 read past end of data"];
     byte = *p++;
-    result |= ((byte & 0x7f) << bit);
+    result |= ((int64_t)(byte & 0x7f) << bit);
     bit += 7;
   } while (byte & 0x80);
-  
+
   // sign extend negative numbers
   if ( (byte & 0x40) != 0 )
   {
     result |= (-1LL) << bit;
   }
-  
+
   range.length = (p - start);
   if (lastReadHex) *lastReadHex = [self getHexStr:range];
   return result;
@@ -207,22 +210,26 @@
 {
   range.location = NSMaxRange(range);
   uint8_t * p = (uint8_t *)[fileData bytes] + range.location, *start = p;
-  
+  uint8_t * end = (uint8_t *)[fileData bytes] + [fileData length];
+
   uint64_t result = 0;
   int bit = 0;
-  
+
   do {
+    if (p >= end)
+      [NSException raise:@"uleb128 error" format:@"uleb128 read past end of data"];
+
     uint64_t slice = *p & 0x7f;
-    
+
     if (bit >= 64 || slice << bit >> bit != slice)
       [NSException raise:@"uleb128 error" format:@"uleb128 too big"];
     else {
       result |= (slice << bit);
       bit += 7;
     }
-  } 
+  }
   while (*p++ & 0x80);
-  
+
   range.length = (p - start);
   if (lastReadHex) *lastReadHex = [self getHexStr:range];
   return result;
