@@ -30,6 +30,20 @@ I also have to think about providing binary builds or not since I don't own righ
 Have fun,  
 fG!
 
+## Build
+
+Command-line build using `build.sh`:
+
+```bash
+./build.sh          # Debug build (default)
+./build.sh debug    # Debug build
+./build.sh release  # Release build
+./build.sh clean    # Clean all build artifacts including Capstone
+```
+
+Capstone is automatically built on first run and skipped on subsequent builds.
+Build output: `build/Build/Products/<Config>/MachOView.app`
+
 ---
 
 A fork from MachOView to update and fix some bugs, mostly Mountain Lion & iOS 6 related.  
